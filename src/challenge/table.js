@@ -30,11 +30,6 @@ const Table = (params) => {
     doNext,
   } = useTable(rows, startingPage, perPageCount);
 
-  console.log("currentRows", currentRows);
-  console.log("currentPage", currentPage);
-  console.log("numberOfPage", numberOfPage);
-  console.log("rowsPerPage", rowsPerPage);
-
   return (
     <div>
       {isFilterAllowed && (
@@ -47,15 +42,16 @@ const Table = (params) => {
           />
         </InputGroup>
       )}
-      <table>
+      
+      <table className="table-container">
         <tr>
           {headers.map((s) => {
             return (
               <th>
                 {!s.headerCheckBox ? (
-                  <div>
-                    <p className="title">{s.title}</p>
-                    {s.subTitle && <p className="subTitle">{s.subTitle}</p>}
+                  <div className="header-Cell">
+                    <div>{s.title}</div>
+                    {s.subTitle && <div>{s.subTitle}</div>}
                   </div>
                 ) : (
                   <div>
@@ -79,9 +75,10 @@ const Table = (params) => {
           </tr>
         ))}
       </table>
+      
       {allowPagination && rows.length > rowsPerPage && (
         <Pagination
-        numberOfPage={numberOfPage}
+          numberOfPage={numberOfPage}
           totalRows={rows.length}
           currentPage={currentPage}
           doPaginate={doPaginate}

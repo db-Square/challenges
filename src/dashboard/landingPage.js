@@ -1,17 +1,30 @@
 import React from "react";
 import Table from "../challenge/table";
-import { tableData } from "./applicationData";
+
 import { Form } from "react-bootstrap";
-import "./dashboard.css";
+import "./landing.css";
 
 export default class LandingPage extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      contentTitle: "",
-      employeeData: tableData,
+      employeeData: [],
     };
+  }
+
+  componentDidMount() {
+    fetch(
+      "https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json"
+    )
+      .then((res) => res.json())
+      .then((result) => {
+        console.log("result", result);
+
+        this.setState({
+          employeeData: result,
+        });
+      });
   }
 
   getDatetime = () => {
@@ -55,7 +68,6 @@ export default class LandingPage extends React.Component {
 
   getRows = () => {
     const { employeeData } = this.state;
-    console.log("employeeData", employeeData);
     return employeeData.map((s, index) => {
       return [
         {
@@ -72,21 +84,13 @@ export default class LandingPage extends React.Component {
           ),
         },
         {
-          content: (
-            <div>
-              {s.name}
-              {index}
-            </div>
-          ),
+          content: <div>{s.name}</div>,
         },
         {
-          content: <div>{s.salary1}</div>,
+          content: <div>{s.email}</div>,
         },
         {
-          content: <div>{s.salary2}</div>,
-        },
-        {
-          content: <div>{s.salary3}</div>,
+          content: <div>{s.role}</div>,
         },
         {
           content: (
@@ -108,20 +112,16 @@ export default class LandingPage extends React.Component {
         headerCheckEvent: this.onHeaderCheckEvent,
       },
       {
-        title: "Employee Name",
-        subTitle: "Duration",
+        title: "Name",
+        // subTitle: "Duration",
       },
       {
-        title: "Company 1",
-        subTitle: "2004-2006",
+        title: "Email",
+        // subTitle: "2004-2006",
       },
       {
-        title: "Company 2",
-        subTitle: "2004-2006",
-      },
-      {
-        title: "Company 3",
-        subTitle: "2006-2010",
+        title: "Role",
+        // subTitle: "2004-2006",
       },
       {
         title: "",
@@ -152,28 +152,18 @@ export default class LandingPage extends React.Component {
   };
 
   render() {
-    const { contentTitle } = this.state;
-
     return (
       <div>
-        <div className="top">
-          <div>{this.greeting()}, Bangalore, India</div>
-          <div>Deeptanshu Belwal, Full Stack Developer</div>
-        </div>
-        <div className="left">
-          <div className="sidebar">
-            <button onClick={() => this.onSideMenuClick("Table")}>
-              Table Control
-            </button>
-            <button onClick={() => this.onSideMenuClick("Date")}>
-              Date Control
-            </button>
+        <div class="page-Layout">
+          <div class="item1">
+            <div>{this.greeting()}</div>
+            <div>Building Table Control</div>
+            <div>
+              I am Deeptanshu Belwal, Full Stack Developer, Bangalore, India
+            </div>
           </div>
-        </div>
-        <div className="main">
-          <h2>{contentTitle}</h2>
-          <p>this is new contol</p>
-          {contentTitle === "Table" && (
+
+          <div class="item2">
             <Table
               headers={this.getHeaders()}
               rows={this.getRows()}
@@ -184,7 +174,8 @@ export default class LandingPage extends React.Component {
               onfilterData={this.onfilterData}
               allowPagination={true}
             ></Table>
-          )}
+          </div>
+          <div class="item3">© copyright by db-Square</div>
         </div>
       </div>
     );

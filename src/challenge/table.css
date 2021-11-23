@@ -1,4 +1,4 @@
-table {
+.table-container {
   border-collapse: collapse;
   width: 100%;
 }
@@ -25,4 +25,7 @@ th {
   font-size: medium;
 }
 
-
+.header-Cell {
+  display: grid;
+  grid-row-gap: 2px;
+}
