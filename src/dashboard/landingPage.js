@@ -20,6 +20,7 @@ export default class LandingPage extends React.Component {
     )
       .then((res) => res.json())
       .then((result) => {
+        console.log("result", result);
         if (result && result.length > 0) {
           result.forEach((element) => {
             element.isDisable = true;
@@ -216,7 +217,7 @@ export default class LandingPage extends React.Component {
           </div>
 
           <div class="item2">
-            {/* <Table
+            <Table
               headers={this.getHeaders()}
               rows={this.getRows()}
               perPageCount={10}
@@ -224,7 +225,7 @@ export default class LandingPage extends React.Component {
               isFilterAllowed={true}
               onfilterData={this.onfilterData}
               allowPagination={true}
-            ></Table> */}
+            ></Table>
           </div>
           <div class="item3">© copyright by db-Square</div>
         </div>
