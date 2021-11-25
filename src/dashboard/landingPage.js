@@ -1,7 +1,7 @@
 import React from "react";
 import Table from "../challenge/table";
-
 import { Form } from "react-bootstrap";
+import * as Icon from "react-bootstrap-icons";
 import "./landing.css";
 
 export default class LandingPage extends React.Component {
@@ -10,6 +10,7 @@ export default class LandingPage extends React.Component {
 
     this.state = {
       employeeData: [],
+      filter: null,
     };
   }
 
@@ -19,11 +20,19 @@ export default class LandingPage extends React.Component {
     )
       .then((res) => res.json())
       .then((result) => {
-        console.log("result", result);
+        if (result && result.length > 0) {
+          result.forEach((element) => {
+            element.isDisable = true;
+          });
 
-        this.setState({
-          employeeData: result,
-        });
+          this.setState({
+            employeeData: result,
+          });
+        } else {
+          this.setState({
+            employeeData: [],
+          });
+        }
       });
   }
 
@@ -48,11 +57,22 @@ export default class LandingPage extends React.Component {
   };
 
   onRowEdit = (row) => {
-    alert(`Edit the selected Record ${row.name}`);
+    const gridData = this.state.employeeData;
+
+    const filterdata = gridData.find((s) => s.id === row.id);
+    filterdata.isDisable = false;
+
+    this.setState({
+      employeeData: gridData,
+    });
   };
 
   onRowDelete = (row) => {
-    alert(`Delete the selected Record ${row.name}`);
+    const gridData = this.state.employeeData;
+    const filterdata = gridData.filter((s) => s.id !== row.id);
+    this.setState({
+      employeeData: filterdata,
+    });
   };
 
   rowCheckChange = (e) => (row) => {
@@ -67,8 +87,13 @@ export default class LandingPage extends React.Component {
   };
 
   getRows = () => {
-    const { employeeData } = this.state;
-    return employeeData.map((s, index) => {
+    const { employeeData, filter } = this.state;
+
+    const dataToShow = filter
+      ? employeeData.filter((d) => d.name.includes(filter))
+      : employeeData;
+
+    return dataToShow.map((s, index) => {
       return [
         {
           content: (
@@ -87,16 +112,42 @@ export default class LandingPage extends React.Component {
           content: <div>{s.name}</div>,
         },
         {
-          content: <div>{s.email}</div>,
-        },
-        {
-          content: <div>{s.role}</div>,
+          content: (
+            <div>
+              <input
+                type="text"
+                id="email"
+                name="email"
+                value={s.email}
+                disabled={s.isDisable}
+              />
+            </div>
+          ),
         },
         {
           content: (
             <div>
-              <button onClick={() => this.onRowEdit(s)}>Edit</button>
-              <button onClick={() => this.onRowDelete(s)}>Delete</button>
+              <input
+                type="text"
+                id="role"
+                name="role"
+                value={s.role}
+                disabled={s.isDisable}
+              />
+            </div>
+          ),
+        },
+        {
+          content: (
+            <div>
+              <button onClick={() => this.onRowEdit(s)}>
+                <Icon.PencilSquare />
+              </button>
+              <span style={{ marginLeft: "2px" }}>
+                <button onClick={() => this.onRowDelete(s)}>
+                  <Icon.Trash />
+                </button>
+              </span>
             </div>
           ),
         },
@@ -144,11 +195,12 @@ export default class LandingPage extends React.Component {
   };
 
   onRowClick = (row) => {
-    console.log("onRowClick", row);
+    // console.log("onRowClick", row);
   };
 
   onfilterData = (param) => {
-    console.log("onfilterData", param.target.value);
+    // console.log("onfilterData", param.target.value);
+    this.setState({ filter: param.target.value });
   };
 
   render() {
