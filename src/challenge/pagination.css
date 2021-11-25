@@ -18,5 +18,5 @@ ul.pagination li.active {
 ul.pagination li:hover:not(.active) {
   background-color: #ddd;
   border-radius: 5px;
+  cursor: pointer;
 }
-

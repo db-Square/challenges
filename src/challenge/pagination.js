@@ -10,10 +10,8 @@ const Pagination = ({
   doNext,
 }) => (
   <div style={{ display: "flex", justifyContent: "flex-end" }}>
-    <div>
-      <p>
-        <span>{totalRows}</span> results
-      </p>
+    <div style={{ margin: "10px" }}>
+      <span>{totalRows}</span> results
     </div>
     <div>
       <ul class="pagination">
