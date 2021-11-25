@@ -1,4 +1,3 @@
-import { Button } from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
 import "./pagination.css";
 

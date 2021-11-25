@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { InputGroup, FormControl } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { useTable } from "./useTable";
@@ -42,7 +42,7 @@ const Table = (params) => {
           />
         </InputGroup>
       )}
-      
+
       <table className="table-container">
         <tr>
           {headers.map((s) => {
@@ -75,7 +75,7 @@ const Table = (params) => {
           </tr>
         ))}
       </table>
-      
+
       {allowPagination && rows.length > rowsPerPage && (
         <Pagination
           numberOfPage={numberOfPage}

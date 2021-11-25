@@ -220,7 +220,6 @@ export default class LandingPage extends React.Component {
               headers={this.getHeaders()}
               rows={this.getRows()}
               perPageCount={10}
-              allowPagination={false}
               onRowClick={this.onRowClick()}
               isFilterAllowed={true}
               onfilterData={this.onfilterData}
