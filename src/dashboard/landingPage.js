@@ -265,17 +265,7 @@ export default class LandingPage extends React.Component {
           </div>
 
           <div class="item2">
-            <Table
-              headers={this.getHeaders()}
-              rows={this.getRows()}
-              perPageCount={10}
-              onRowClick={this.onRowClick()}
-              isFilterAllowed={true}
-              onfilterData={this.onfilterData}
-              allowPagination={true}
-              deleteAll={this.onDeleteAll}
-            ></Table>
-            {/* {employeeData.length > 0 ? (
+            {employeeData.length > 0 ? (
               <Table
                 headers={this.getHeaders()}
                 rows={this.getRows()}
@@ -290,7 +280,7 @@ export default class LandingPage extends React.Component {
               <div>
                 <Alert variant="danger">No data available</Alert>
               </div>
-            )} */}
+            )}
           </div>
 
           <div class="item3">© copyright by db-Square</div>
