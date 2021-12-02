@@ -1,6 +1,6 @@
 import React from "react";
 import Table from "../challenge/table";
-import { Form } from "react-bootstrap";
+import { Form, Alert } from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
 import "./landing.css";
 
@@ -20,7 +20,6 @@ export default class LandingPage extends React.Component {
     )
       .then((res) => res.json())
       .then((result) => {
-        console.log("result", result);
         if (result && result.length > 0) {
           result.forEach((element) => {
             element.isDisable = true;
@@ -61,7 +60,7 @@ export default class LandingPage extends React.Component {
     const gridData = this.state.employeeData;
 
     const filterdata = gridData.find((s) => s.id === row.id);
-    filterdata.isDisable = false;
+    filterdata.isDisable = !filterdata.isDisable;
 
     this.setState({
       employeeData: gridData,
@@ -87,12 +86,31 @@ export default class LandingPage extends React.Component {
     });
   };
 
+  onTextChange = (param) => (id) => {
+    const value = param.target.value;
+    const name = param.target.name;
+    const gridData = this.state.employeeData;
+    const filterdata = gridData.find((s) => s.id === id);
+    filterdata[name] = value;
+
+    this.setState({
+      employeeData: gridData,
+    });
+  };
+
   getRows = () => {
     const { employeeData, filter } = this.state;
 
     const dataToShow = filter
-      ? employeeData.filter((d) => d.name.includes(filter))
+      ? employeeData.filter(
+          (d) =>
+            d.name.includes(filter) ||
+            d.email.includes(filter) ||
+            d.role.includes(filter)
+        )
       : employeeData;
+
+    // console.log("dataToShow", dataToShow);
 
     return dataToShow.map((s, index) => {
       return [
@@ -110,7 +128,18 @@ export default class LandingPage extends React.Component {
           ),
         },
         {
-          content: <div>{s.name}</div>,
+          content: (
+            <div>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={s.name}
+                disabled={s.isDisable}
+                onChange={(p) => this.onTextChange(p)(s.id)}
+              />
+            </div>
+          ),
         },
         {
           content: (
@@ -121,6 +150,7 @@ export default class LandingPage extends React.Component {
                 name="email"
                 value={s.email}
                 disabled={s.isDisable}
+                onChange={(p) => this.onTextChange(p)(s.id)}
               />
             </div>
           ),
@@ -134,6 +164,7 @@ export default class LandingPage extends React.Component {
                 name="role"
                 value={s.role}
                 disabled={s.isDisable}
+                onChange={(p) => this.onTextChange(p)(s.id)}
               />
             </div>
           ),
@@ -182,8 +213,6 @@ export default class LandingPage extends React.Component {
   };
 
   onHeaderCheckEvent = (e) => {
-    // console.log("onHeaderCheckEvent", e.target.checked);
-    // alert(`Header checkbox is selected ${e.target.checked}`);
     const ischeck = e.target.checked;
     const empData = this.state.employeeData;
     empData.forEach((element) => {
@@ -200,11 +229,30 @@ export default class LandingPage extends React.Component {
   };
 
   onfilterData = (param) => {
-    // console.log("onfilterData", param.target.value);
     this.setState({ filter: param.target.value });
   };
 
+  onDeleteAll = () => {
+    const empData = this.state.employeeData;
+    console.log("empData", empData.length);
+    const filteredValue = this.state.employeeData.filter(
+      (s) => s.isChecked === true
+    );
+    console.log("filteredValue", filteredValue);
+    if (filteredValue.length > 0) {
+      const selectedIds = filteredValue.map((s) => s.id);
+      console.log("selectedIds", selectedIds);
+      const filterdata = empData.filter((s) => !selectedIds.includes(s.id));
+      console.log("filterdata", filterdata);
+      this.setState({
+        employeeData: filterdata,
+      });
+    }
+  };
+
   render() {
+    const { employeeData } = this.state;
+
     return (
       <div>
         <div class="page-Layout">
@@ -225,8 +273,26 @@ export default class LandingPage extends React.Component {
               isFilterAllowed={true}
               onfilterData={this.onfilterData}
               allowPagination={true}
+              deleteAll={this.onDeleteAll}
             ></Table>
+            {/* {employeeData.length > 0 ? (
+              <Table
+                headers={this.getHeaders()}
+                rows={this.getRows()}
+                perPageCount={10}
+                onRowClick={this.onRowClick()}
+                isFilterAllowed={true}
+                onfilterData={this.onfilterData}
+                allowPagination={true}
+                deleteAll={this.onDeleteAll}
+              ></Table>
+            ) : (
+              <div>
+                <Alert variant="danger">No data available</Alert>
+              </div>
+            )} */}
           </div>
+
           <div class="item3">© copyright by db-Square</div>
         </div>
       </div>

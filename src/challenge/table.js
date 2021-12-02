@@ -1,12 +1,11 @@
 import React from "react";
-import { InputGroup, FormControl } from "react-bootstrap";
+import { InputGroup, FormControl, Button } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { useTable } from "./useTable";
 import Pagination from "./pagination";
 import "./table.css";
 
 const Table = (params) => {
-  console.log("params", params);
   const {
     headers,
     rows,
@@ -16,15 +15,15 @@ const Table = (params) => {
     isFilterAllowed,
     onfilterData,
     startingPage,
+    deleteAll,
   } = params;
-  // headers can have  {title, subTitle,headerCheckBox,headerCheckEvent className}
-  // onRowClick will return selected row
 
   const {
     rowsPerPage,
     currentRows,
+    totalPages,
     numberOfPage,
-    currentPage,
+    currentpage,
     doPaginate,
     doPrev,
     doNext,
@@ -76,16 +75,25 @@ const Table = (params) => {
         ))}
       </table>
 
-      {allowPagination && rows.length > rowsPerPage && (
-        <Pagination
-          numberOfPage={numberOfPage}
-          totalRows={rows.length}
-          currentPage={currentPage}
-          doPaginate={doPaginate}
-          doPrev={doPrev}
-          doNext={doNext}
-        />
-      )}
+      <div style={{ display: "flex" }}>
+        <div>
+          <Button variant="danger" onClick={deleteAll}>
+            Delete All
+          </Button>
+        </div>
+        <div style={{ flex: "auto" }}>
+          {allowPagination && rows.length > rowsPerPage && (
+            <Pagination
+              numberOfPage={numberOfPage}
+              totalRows={rows.length}
+              currentPage={currentpage}
+              doPaginate={doPaginate}
+              doPrev={doPrev}
+              doNext={doNext}
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 };
